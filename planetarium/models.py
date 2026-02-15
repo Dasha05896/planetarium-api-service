@@ -13,6 +13,18 @@ class ShowTheme(models.Model):
         return self.name
 
 
+class AstronomyShow(models.Model):
+    title = models.CharField(max_length=255)
+    description = models.TextField()
+    themes = models.ManyToManyField(ShowTheme, related_name="astronomy_shows", blank=True)
+
+    class Meta:
+        ordering = ["title"]
+
+    def __str__(self):
+        return self.title
+
+
 class PlanetariumDome(models.Model):
     name = models.CharField(max_length=255)
     rows = models.IntegerField()
