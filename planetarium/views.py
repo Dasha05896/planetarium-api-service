@@ -27,7 +27,8 @@ class ShowThemeViewSet(viewsets.ModelViewSet):
     serializer_class = ShowThemeSerializer
 
 class AstronomyShowViewSet(viewsets.ModelViewSet):
-    queryset = AstronomyShow.objects.all()
+    # Оптимізація: завантажуємо теми разом із шоу
+    queryset = AstronomyShow.objects.prefetch_related("themes")
     serializer_class = AstronomyShowSerializer
 
     def get_serializer_class(self):
@@ -38,9 +39,16 @@ class AstronomyShowViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         queryset = self.queryset
         themes = self.request.query_params.get("themes")
+        title = self.request.query_params.get("title")
+
         if themes:
             themes_ids = [int(str_id) for str_id in themes.split(",")]
             queryset = queryset.filter(themes__id__in=themes_ids)
+
+        if title:
+            # Виправлення для тесту: фільтрація за назвою
+            queryset = queryset.filter(title__icontains=title)
+
         return queryset.distinct()
 
 class PlanetariumDomeViewSet(viewsets.ModelViewSet):
@@ -65,6 +73,20 @@ class ShowSessionViewSet(viewsets.ModelViewSet):
             return ShowSessionListSerializer
         return ShowSessionSerializer
 
+    def get_queryset(self):
+        queryset = self.queryset
+        date = self.request.query_params.get("date")
+        show_id = self.request.query_params.get("show")
+
+        if date:
+            date_obj = datetime.strptime(date, "%Y-%m-%d").date()
+            queryset = queryset.filter(show_time__date=date_obj)
+
+        if show_id:
+            queryset = queryset.filter(astronomy_show_id=int(show_id))
+
+        return queryset
+
 class ReservationPagination(PageNumberPagination):
     page_size = 10
     max_page_size = 100
@@ -74,12 +96,16 @@ class ReservationViewSet(
     mixins.CreateModelMixin,
     viewsets.GenericViewSet,
 ):
-    queryset = Reservation.objects.prefetch_related("tickets__show_session__astronomy_show")
+    queryset = Reservation.objects.prefetch_related(
+        "tickets__show_session__astronomy_show",
+        "tickets__show_session__planetarium_dome"
+    )
     serializer_class = ReservationSerializer
     pagination_class = ReservationPagination
     permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
+        # Користувач бачить лише свої бронювання
         return self.queryset.filter(user=self.request.user)
 
     def get_serializer_class(self):
