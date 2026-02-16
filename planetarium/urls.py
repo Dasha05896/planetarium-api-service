@@ -9,7 +9,6 @@ from planetarium.views import (
     ReservationViewSet,
 )
 
-# Створюємо роутер і реєструємо наші в'юсети
 router = routers.DefaultRouter()
 router.register("show_themes", ShowThemeViewSet)
 router.register("astronomy_shows", AstronomyShowViewSet)
@@ -21,5 +20,4 @@ urlpatterns = [
     path("", include(router.urls)),
 ]
 
-# Це додасть назву для ідентифікації в загальних urls проєкту
 app_name = "planetarium"

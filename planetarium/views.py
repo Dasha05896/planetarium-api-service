@@ -27,7 +27,6 @@ class ShowThemeViewSet(viewsets.ModelViewSet):
     serializer_class = ShowThemeSerializer
 
 class AstronomyShowViewSet(viewsets.ModelViewSet):
-    # Оптимізація: завантажуємо теми разом із шоу
     queryset = AstronomyShow.objects.prefetch_related("themes")
     serializer_class = AstronomyShowSerializer
 
@@ -37,7 +36,9 @@ class AstronomyShowViewSet(viewsets.ModelViewSet):
         return AstronomyShowSerializer
 
     def get_queryset(self):
-        queryset = self.queryset
+        return self.queryset
+
+    def filter_queryset(self, queryset):
         themes = self.request.query_params.get("themes")
         title = self.request.query_params.get("title")
 
@@ -46,7 +47,6 @@ class AstronomyShowViewSet(viewsets.ModelViewSet):
             queryset = queryset.filter(themes__id__in=themes_ids)
 
         if title:
-            # Виправлення для тесту: фільтрація за назвою
             queryset = queryset.filter(title__icontains=title)
 
         return queryset.distinct()
@@ -74,7 +74,9 @@ class ShowSessionViewSet(viewsets.ModelViewSet):
         return ShowSessionSerializer
 
     def get_queryset(self):
-        queryset = self.queryset
+        return self.queryset
+
+    def filter_queryset(self, queryset):
         date = self.request.query_params.get("date")
         show_id = self.request.query_params.get("show")
 
@@ -105,7 +107,6 @@ class ReservationViewSet(
     permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
-        # Користувач бачить лише свої бронювання
         return self.queryset.filter(user=self.request.user)
 
     def get_serializer_class(self):

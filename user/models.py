@@ -3,7 +3,6 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 class UserManager(BaseUserManager):
-    """Менеджер для моделі користувача, де Email є унікальним ідентифікатором."""
     def create_user(self, email, password=None, **extra_fields):
         if not email:
             raise ValueError(_("The Email must be set"))
