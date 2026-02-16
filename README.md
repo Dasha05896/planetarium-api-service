@@ -28,7 +28,7 @@ Docker is the fastest way to get the project running with all configurations pre
    git clone https://github.com/Dasha05896/planetarium-api-service.git
    cd planetarium_api_service
    
-Build and Start:
-
-docker-compose up --build
+2. **Build and Start:**
+    ```bash
+    docker-compose up --build
 
