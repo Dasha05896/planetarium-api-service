@@ -17,3 +17,18 @@ The Planetarium API Service is a specialized platform for managing planetarium o
 - **SQLite** (Database)
 - **Docker & Docker Compose**
 - **JWT (Simple JWT)**
+
+## 🚀 How to Run Locally
+
+### Using Docker (Recommended)
+Docker is the fastest way to get the project running with all configurations pre-set.
+
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/Dasha05896/planetarium-api-service.git
+   cd planetarium_api_service
+   
+Build and Start:
+
+docker-compose up --build
+
