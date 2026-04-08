@@ -22,9 +22,11 @@ from planetarium.serializers import (
     ReservationListSerializer,
 )
 
+
 class ShowThemeViewSet(viewsets.ModelViewSet):
     queryset = ShowTheme.objects.all()
     serializer_class = ShowThemeSerializer
+
 
 class AstronomyShowViewSet(viewsets.ModelViewSet):
     queryset = AstronomyShow.objects.prefetch_related("themes")
@@ -51,9 +53,11 @@ class AstronomyShowViewSet(viewsets.ModelViewSet):
 
         return queryset.distinct()
 
+
 class PlanetariumDomeViewSet(viewsets.ModelViewSet):
     queryset = PlanetariumDome.objects.all()
     serializer_class = PlanetariumDomeSerializer
+
 
 class ShowSessionViewSet(viewsets.ModelViewSet):
     queryset = (
@@ -89,9 +93,11 @@ class ShowSessionViewSet(viewsets.ModelViewSet):
 
         return queryset
 
+
 class ReservationPagination(PageNumberPagination):
     page_size = 10
     max_page_size = 100
+
 
 class ReservationViewSet(
     mixins.ListModelMixin,
@@ -100,7 +106,7 @@ class ReservationViewSet(
 ):
     queryset = Reservation.objects.prefetch_related(
         "tickets__show_session__astronomy_show",
-        "tickets__show_session__planetarium_dome"
+        "tickets__show_session__planetarium_dome",
     )
     serializer_class = ReservationSerializer
     pagination_class = ReservationPagination

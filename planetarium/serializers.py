@@ -25,9 +25,7 @@ class AstronomyShowSerializer(serializers.ModelSerializer):
 
 
 class AstronomyShowListSerializer(AstronomyShowSerializer):
-    themes = serializers.SlugRelatedField(
-        many=True, read_only=True, slug_field="name"
-    )
+    themes = serializers.SlugRelatedField(many=True, read_only=True, slug_field="name")
 
 
 class PlanetariumDomeSerializer(serializers.ModelSerializer):
@@ -73,7 +71,7 @@ class TicketSerializer(serializers.ModelSerializer):
             attrs["row"],
             attrs["seat"],
             attrs["show_session"].planetarium_dome,
-            ValidationError
+            ValidationError,
         )
         return data
 

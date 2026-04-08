@@ -15,72 +15,157 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='AstronomyShow',
+            name="AstronomyShow",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('title', models.CharField(max_length=255)),
-                ('description', models.TextField()),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("title", models.CharField(max_length=255)),
+                ("description", models.TextField()),
             ],
             options={
-                'ordering': ['title'],
+                "ordering": ["title"],
             },
         ),
         migrations.CreateModel(
-            name='PlanetariumDome',
+            name="PlanetariumDome",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=255)),
-                ('rows', models.IntegerField()),
-                ('seats_in_row', models.IntegerField()),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=255)),
+                ("rows", models.IntegerField()),
+                ("seats_in_row", models.IntegerField()),
             ],
         ),
         migrations.CreateModel(
-            name='ShowTheme',
+            name="ShowTheme",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=255)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=255)),
             ],
         ),
         migrations.CreateModel(
-            name='Reservation',
+            name="Reservation",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='reservations', to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="reservations",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
             options={
-                'ordering': ['-created_at'],
+                "ordering": ["-created_at"],
             },
         ),
         migrations.CreateModel(
-            name='ShowSession',
+            name="ShowSession",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('show_time', models.DateTimeField()),
-                ('astronomy_show', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='show_sessions', to='planetarium.astronomyshow')),
-                ('planetarium_dome', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='show_sessions', to='planetarium.planetariumdome')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("show_time", models.DateTimeField()),
+                (
+                    "astronomy_show",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="show_sessions",
+                        to="planetarium.astronomyshow",
+                    ),
+                ),
+                (
+                    "planetarium_dome",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="show_sessions",
+                        to="planetarium.planetariumdome",
+                    ),
+                ),
             ],
             options={
-                'ordering': ['-show_time'],
+                "ordering": ["-show_time"],
             },
         ),
         migrations.AddField(
-            model_name='astronomyshow',
-            name='themes',
-            field=models.ManyToManyField(blank=True, related_name='astronomy_shows', to='planetarium.showtheme'),
+            model_name="astronomyshow",
+            name="themes",
+            field=models.ManyToManyField(
+                blank=True, related_name="astronomy_shows", to="planetarium.showtheme"
+            ),
         ),
         migrations.CreateModel(
-            name='Ticket',
+            name="Ticket",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('row', models.IntegerField()),
-                ('seat', models.IntegerField()),
-                ('reservation', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='tickets', to='planetarium.reservation')),
-                ('show_session', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='tickets', to='planetarium.showsession')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("row", models.IntegerField()),
+                ("seat", models.IntegerField()),
+                (
+                    "reservation",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="tickets",
+                        to="planetarium.reservation",
+                    ),
+                ),
+                (
+                    "show_session",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="tickets",
+                        to="planetarium.showsession",
+                    ),
+                ),
             ],
             options={
-                'ordering': ['row', 'seat'],
-                'unique_together': {('show_session', 'row', 'seat')},
+                "ordering": ["row", "seat"],
+                "unique_together": {("show_session", "row", "seat")},
             },
         ),
     ]
