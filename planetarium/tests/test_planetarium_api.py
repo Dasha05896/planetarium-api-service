@@ -10,7 +10,7 @@ from planetarium.models import (
     PlanetariumDome,
     ShowSession,
     Reservation,
-    Ticket
+    Ticket,
 )
 
 SHOW_URL = reverse("planetarium:astronomyshow-list")
@@ -75,9 +75,7 @@ class PlanetariumApiTests(TestCase):
 
     def test_create_reservation(self):
         session = sample_show_session()
-        payload = {
-            "tickets": [{"row": 1, "seat": 1, "show_session": session.id}]
-        }
+        payload = {"tickets": [{"row": 1, "seat": 1, "show_session": session.id}]}
         res = self.client.post(RESERVATION_URL, payload, format="json")
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
 
@@ -86,8 +84,6 @@ class PlanetariumApiTests(TestCase):
         res_obj = Reservation.objects.create(user=self.user)
         Ticket.objects.create(row=1, seat=1, show_session=session, reservation=res_obj)
 
-        payload = {
-            "tickets": [{"row": 1, "seat": 1, "show_session": session.id}]
-        }
+        payload = {"tickets": [{"row": 1, "seat": 1, "show_session": session.id}]}
         res = self.client.post(RESERVATION_URL, payload, format="json")
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)

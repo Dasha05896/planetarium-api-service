@@ -1,9 +1,6 @@
 from django.db import models
-import os
-import uuid
 from django.conf import settings
 from django.core.exceptions import ValidationError
-from django.utils.text import slugify
 
 
 class ShowTheme(models.Model):
@@ -16,7 +13,9 @@ class ShowTheme(models.Model):
 class AstronomyShow(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField()
-    themes = models.ManyToManyField(ShowTheme, related_name="astronomy_shows", blank=True)
+    themes = models.ManyToManyField(
+        ShowTheme, related_name="astronomy_shows", blank=True
+    )
 
     class Meta:
         ordering = ["title"]
@@ -57,7 +56,9 @@ class ShowSession(models.Model):
 class Reservation(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="reservations"
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="reservations"
     )
 
     class Meta:
@@ -87,7 +88,8 @@ class Ticket(models.Model):
             if not (1 <= ticket_attr_value <= count_attrs):
                 raise error_to_raise(
                     {
-                        ticket_attr_name: f"{ticket_attr_name} number must be in range [1, {count_attrs}]"
+                        ticket_attr_name:
+                            f"{ticket_attr_name} number must be in range [1, {count_attrs}]"
                     }
                 )
 
@@ -105,7 +107,7 @@ class Ticket(models.Model):
 
     class Meta:
         unique_together = ("show_session", "row", "seat")
-        ordering  = ["row", "seat"]
+        ordering = ["row", "seat"]
 
     def __str__(self):
         return f"{self.show_session} (row: {self.row}, seat: {self.seat})"
